@@ -2,6 +2,7 @@ import { products } from "@/shared/const/products.const";
 import Link from "next/link";
 import { ProductCard } from "./ProductCard";
 import { Categories } from "./Categories";
+import Filter from "./Filter";
 
 const ProductList = ({
   category,
@@ -14,7 +15,7 @@ const ProductList = ({
     <div className="w-full">
       <Categories />
 
-      {/* {params === "products" && <Filter />} */}
+      {params === "products" && <Filter />}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-12">
         {products.map((product) => (
