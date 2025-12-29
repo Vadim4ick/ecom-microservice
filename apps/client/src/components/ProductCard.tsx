@@ -1,16 +1,20 @@
 "use client";
 
 import { ProductType } from "@/shared/types/product.type";
+import { useCartStore } from "@/stores/cart.store";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ProductCard = ({ product }: { product: ProductType }) => {
   const [productTypes, setProductTypes] = useState({
-    size: product.sizes[0],
-    color: product.colors[0],
+    size: product.sizes[0] ?? "",
+    color: product.colors[0] ?? "",
   });
+
+  const { addToCart } = useCartStore();
 
   const handleProductType = ({
     type,
@@ -25,7 +29,15 @@ const ProductCard = ({ product }: { product: ProductType }) => {
     }));
   };
 
-  const handleAddToCart = () => {};
+  const handleAddToCart = () => {
+    addToCart({
+      ...product,
+      quantity: 1,
+      selectedSize: productTypes.size,
+      selectedColor: productTypes.color,
+    });
+    toast.success("Product added to cart");
+  };
 
   return (
     <div className="shadow-lg rounded-lg overflow-hidden">
