@@ -35,11 +35,11 @@ const ShippingForm = ({
       onSubmit={handleSubmit(handleShippingForm)}
     >
       <div className="flex flex-col gap-1">
-        <label htmlFor="name" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="name" className="text-xs font-medium text-gray-500">
           Name
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="name"
           placeholder="John Doe"
@@ -50,11 +50,11 @@ const ShippingForm = ({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="email" className="text-xs font-medium text-gray-500">
           Email
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="email"
           id="email"
           placeholder="johndoe@gmail.com"
@@ -65,11 +65,11 @@ const ShippingForm = ({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="phone" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="phone" className="text-xs font-medium text-gray-500">
           Phone
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="phone"
           placeholder="123456789"
@@ -80,11 +80,11 @@ const ShippingForm = ({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="address" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="address" className="text-xs font-medium text-gray-500">
           Address
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="address"
           placeholder="123 Main St, Anytown"
@@ -95,11 +95,11 @@ const ShippingForm = ({
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="city" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="city" className="text-xs font-medium text-gray-500">
           City
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="city"
           placeholder="New York"
@@ -111,10 +111,10 @@ const ShippingForm = ({
       </div>
       <button
         type="submit"
-        className="w-full bg-gray-800 hover:bg-gray-900 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
+        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-800 p-2 text-white transition-all duration-300 hover:bg-gray-900"
       >
         Continue
-        <ArrowRight className="w-3 h-3" />
+        <ArrowRight className="h-3 w-3" />
       </button>
     </form>
   );

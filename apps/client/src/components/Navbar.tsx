@@ -6,7 +6,7 @@ import ShoppingCartIcon from "./ShoppingCartIcon";
 
 const Navbar = () => {
   return (
-    <nav className="w-full flex-between border-b border-gray-200 pb-4">
+    <nav className="flex-between w-full border-b border-gray-200 pb-4">
       <Link href="/" className="flex-start">
         <Image
           src={"/logo.png"}
@@ -16,7 +16,7 @@ const Navbar = () => {
           className="size-6 md:size-9"
         />
 
-        <p className="text-md hidden md:block font-medium tracking-wider">
+        <p className="text-md hidden font-medium tracking-wider md:block">
           TRENDLAMA.
         </p>
       </Link>

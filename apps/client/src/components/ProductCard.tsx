@@ -40,14 +40,14 @@ const ProductCard = ({ product }: { product: ProductType }) => {
   };
 
   return (
-    <div className="shadow-lg rounded-lg overflow-hidden">
+    <div className="overflow-hidden rounded-lg shadow-lg">
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-[2/3]">
           <Image
             src={product.images[productTypes.color!] || ""}
             alt={product.name}
             fill
-            className="object-cover hover:scale-105 transition-all duration-300"
+            className="object-cover transition-all duration-300 hover:scale-105"
           />
         </div>
       </Link>
@@ -64,7 +64,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
             <select
               name="size"
               id="size"
-              className="ring ring-gray-300 rounded-md px-2 py-1"
+              className="rounded-md px-2 py-1 ring ring-gray-300"
               onChange={(e) => {
                 handleProductType({ type: "size", value: e.target.value });
               }}
@@ -108,7 +108,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
           <p className="font-medium">${product.price.toFixed(2)}</p>
           <button
             onClick={handleAddToCart}
-            className="ring-1 ring-gray-200 shadow-lg rounded-md px-2 py-1 text-sm cursor-pointer hover:text-white hover:bg-black transition-all duration-300 flex items-center gap-2"
+            className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 text-sm shadow-lg ring-1 ring-gray-200 transition-all duration-300 hover:bg-black hover:text-white"
           >
             <ShoppingCart className="size-4" />
             Add to Cart

@@ -26,12 +26,12 @@ const PaymentForm = () => {
       <div className="flex flex-col gap-1">
         <label
           htmlFor="cardHolder"
-          className="text-xs text-gray-500 font-medium"
+          className="text-xs font-medium text-gray-500"
         >
           Name on card
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="cardHolder"
           placeholder="John Doe"
@@ -44,12 +44,12 @@ const PaymentForm = () => {
       <div className="flex flex-col gap-1">
         <label
           htmlFor="cardNumber"
-          className="text-xs text-gray-500 font-medium"
+          className="text-xs font-medium text-gray-500"
         >
           Card Number
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="cardNumber"
           placeholder="123456789123"
@@ -62,12 +62,12 @@ const PaymentForm = () => {
       <div className="flex flex-col gap-1">
         <label
           htmlFor="expirationDate"
-          className="text-xs text-gray-500 font-medium"
+          className="text-xs font-medium text-gray-500"
         >
           Expiration Date
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="expirationDate"
           placeholder="01/32"
@@ -80,11 +80,11 @@ const PaymentForm = () => {
         )}
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="cvv" className="text-xs text-gray-500 font-medium">
+        <label htmlFor="cvv" className="text-xs font-medium text-gray-500">
           CVV
         </label>
         <input
-          className="border-b border-gray-200 py-2 outline-none text-sm"
+          className="border-b border-gray-200 py-2 text-sm outline-none"
           type="text"
           id="cvv"
           placeholder="123"
@@ -94,7 +94,7 @@ const PaymentForm = () => {
           <p className="text-xs text-red-500">{errors.cvv.message}</p>
         )}
       </div>
-      <div className="flex items-center gap-2 mt-4">
+      <div className="mt-4 flex items-center gap-2">
         <Image
           src="/klarna.png"
           alt="klarna"
@@ -119,10 +119,10 @@ const PaymentForm = () => {
       </div>
       <button
         type="submit"
-        className="w-full bg-gray-800 hover:bg-gray-900 transition-all duration-300 text-white p-2 rounded-lg cursor-pointer flex items-center justify-center gap-2"
+        className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-gray-800 p-2 text-white transition-all duration-300 hover:bg-gray-900"
       >
         Checkout
-        <ShoppingCart className="w-3 h-3" />
+        <ShoppingCart className="h-3 w-3" />
       </button>
     </form>
   );

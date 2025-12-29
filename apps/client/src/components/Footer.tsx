@@ -4,11 +4,11 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="mt-16 flex flex-col items-center gap-8 md:flex-row md:items-start md:justify-between md:gap-0 bg-gray-800 p-8 rounded-lg">
-      <div className="flex flex-col gap-4 items-center md:items-start">
+    <div className="mt-16 flex flex-col items-center gap-8 rounded-lg bg-gray-800 p-8 md:flex-row md:items-start md:justify-between md:gap-0">
+      <div className="flex flex-col items-center gap-4 md:items-start">
         <Link href="/" className="flex items-center">
           <Image src="/logo.png" alt="TrendLama" width={36} height={36} />
-          <p className="hidden md:block text-md font-medium tracking-wider text-white">
+          <p className="text-md hidden font-medium tracking-wider text-white md:block">
             TRENDLAMA.
           </p>
         </Link>
@@ -19,7 +19,7 @@ const Footer = () => {
       {footerLinks.map((link) => (
         <div
           key={link.id}
-          className="flex flex-col gap-4 text-sm text-gray-400 items-center md:items-start"
+          className="flex flex-col items-center gap-4 text-sm text-gray-400 md:items-start"
         >
           <p className="text-sm text-amber-50">{link.name}</p>
 

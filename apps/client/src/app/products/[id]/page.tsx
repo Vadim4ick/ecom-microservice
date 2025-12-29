@@ -45,18 +45,18 @@ const ProductPage = async ({
   const selectedSize = size || (product.sizes[0] as string);
   const selectedColor = color || (product.colors[0] as string);
   return (
-    <div className="flex flex-col gap-4 lg:flex-row md:gap-12 mt-12">
+    <div className="mt-12 flex flex-col gap-4 md:gap-12 lg:flex-row">
       {/* IMAGE */}
-      <div className="w-full lg:w-5/12 relative aspect-[2/3]">
+      <div className="relative aspect-[2/3] w-full lg:w-5/12">
         <Image
           src={product.images[selectedColor]!}
           alt={product.name}
           fill
-          className="object-contain rounded-md"
+          className="rounded-md object-contain"
         />
       </div>
       {/* DETAILS */}
-      <div className="w-full lg:w-7/12 flex flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 lg:w-7/12">
         <h1 className="text-2xl font-medium">{product.name}</h1>
         <p className="text-gray-500">{product.description}</p>
         <h2 className="text-2xl font-semibold">${product.price.toFixed(2)}</h2>
@@ -66,7 +66,7 @@ const ProductPage = async ({
           selectedColor={selectedColor}
         />
         {/* CARD INFO */}
-        <div className="flex items-center gap-2 mt-4">
+        <div className="mt-4 flex items-center gap-2">
           <Image
             src="/klarna.png"
             alt="klarna"
@@ -89,7 +89,7 @@ const ProductPage = async ({
             className="rounded-md"
           />
         </div>
-        <p className="text-gray-500 text-xs">
+        <p className="text-xs text-gray-500">
           By clicking Pay Now, you agree to our{" "}
           <span className="underline hover:text-black">Terms & Conditions</span>{" "}
           and <span className="underline hover:text-black">Privacy Policy</span>
