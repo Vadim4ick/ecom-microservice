@@ -4,9 +4,15 @@ const fastify = Fastify({
   logger: true,
 });
 
-fastify.get("/", async (req, res) => {
-  return await res.send("Order service is running");
+fastify.get("/health", async (req, res) => {
+  return res.status(200).send({
+    status: "ok",
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+  });
 });
+
+// fastify.get("/orders", async (req, res) => {});
 
 const start = async () => {
   try {
