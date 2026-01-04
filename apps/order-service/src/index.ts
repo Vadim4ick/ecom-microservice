@@ -4,6 +4,10 @@ const fastify = Fastify({
   logger: true,
 });
 
+fastify.get("/", async (req, res) => {
+  return await res.send("Order service is running");
+});
+
 const start = async () => {
   try {
     await fastify.listen({
