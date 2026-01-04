@@ -52,9 +52,9 @@ export const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => {
       const product = row.original;
       return (
-        <div className="w-9 h-9 relative">
+        <div className="relative h-9 w-9">
           <Image
-            src={product.images[product.colors[0]]}
+            src={product.images[product.colors[0] || ""] || ""}
             alt={product.name}
             fill
             className="rounded-full object-cover"
@@ -101,7 +101,9 @@ export const columns: ColumnDef<Product>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id.toString())}
+              onClick={() =>
+                navigator.clipboard.writeText(product.id.toString())
+              }
             >
               Copy product ID
             </DropdownMenuItem>
