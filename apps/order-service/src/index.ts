@@ -1,8 +1,13 @@
 import Fastify from "fastify";
 
+import { clerkPlugin } from "@clerk/fastify";
+import { shouldByUser } from "./middleware/authMiddleware";
+
 const fastify = Fastify({
   logger: true,
 });
+
+fastify.register(clerkPlugin);
 
 fastify.get("/health", async (req, res) => {
   return res.status(200).send({
@@ -12,7 +17,11 @@ fastify.get("/health", async (req, res) => {
   });
 });
 
-// fastify.get("/orders", async (req, res) => {});
+fastify.get("/test", { preHandler: shouldByUser }, async (req, res) => {
+  return res
+    .status(200)
+    .send({ message: "Order Service authenticated", userId: req.userId });
+});
 
 const start = async () => {
   try {
