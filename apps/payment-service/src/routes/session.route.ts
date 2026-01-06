@@ -10,38 +10,33 @@ sessionRoute.post("/create-checkout-session", shouldByUser, async (c) => {
   const { cart }: { cart: CartItemsType } = await c.req.json();
   const userId = c.get("userId");
 
-  const lineItems = await Promise.all(
-    cart.map(async (item) => {
-      const unitAmount = await getStripeProductPrice(item.id);
+  try {
+    const lineItems = cart.map((item) => {
       return {
         price_data: {
           currency: "usd",
           product_data: {
             name: item.name,
           },
-          unit_amount: unitAmount as number,
+          unit_amount: Math.round(item.price * 100), // конвертируй доллары в центы
         },
         quantity: item.quantity,
       };
-    }),
-  );
+    });
 
-  try {
     const session = await stripe.checkout.sessions.create({
       line_items: lineItems,
       client_reference_id: userId,
       mode: "payment",
       ui_mode: "custom",
       return_url:
-        "http://localhost:3001/return?session_id={CHECKOUT_SESSION_ID}",
+        "http://localhost:3000/return?session_id={CHECKOUT_SESSION_ID}",
     });
-
-    // console.log(session);
 
     return c.json({ checkoutSessionClientSecret: session.client_secret });
   } catch (error) {
-    console.log(error);
-    return c.json({ error });
+    console.error("Checkout session error:", error);
+    return c.json({ error: "Failed to create checkout session" }, 500);
   }
 });
 
