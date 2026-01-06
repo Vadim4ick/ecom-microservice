@@ -1,7 +1,7 @@
 "use client";
 
-import { ProductType } from "@/shared/types/product.type";
 import { useCartStore } from "@/stores/cart.store";
+import { Product } from "@repo/db";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -12,7 +12,7 @@ const ProductInteraction = ({
   selectedSize,
   selectedColor,
 }: {
-  product: ProductType;
+  product: Product;
   selectedSize: string;
   selectedColor: string;
 }) => {

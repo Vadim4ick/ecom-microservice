@@ -1,0 +1,49 @@
+import { Product } from "@repo/db";
+
+export type ProductType = Product;
+
+export type ProductsType = ProductType[];
+
+export type StripeProductType = {
+  id: string;
+  name: string;
+  price: number;
+};
+
+export const colors = [
+  "blue",
+  "green",
+  "red",
+  "yellow",
+  "purple",
+  "orange",
+  "pink",
+  "brown",
+  "gray",
+  "black",
+  "white",
+] as const;
+
+export const sizes = [
+  "xs",
+  "s",
+  "m",
+  "l",
+  "xl",
+  "xxl",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+  "39",
+  "40",
+  "41",
+  "42",
+  "43",
+  "44",
+  "45",
+  "46",
+  "47",
+  "48",
+] as const;

@@ -2,4 +2,4 @@ const OrdersPage = () => {
   return <div>page</div>;
 };
 
-export { OrdersPage };
+export default OrdersPage;

@@ -1,16 +1,42 @@
-import { products } from "@/shared/const/products.const";
 import Link from "next/link";
 import { ProductCard } from "./ProductCard";
 import { Categories } from "./Categories";
 import Filter from "./Filter";
+import { Product } from "@repo/db";
 
-const ProductList = ({
+const fetchData = async ({
+  category,
+  sort,
+  search,
+  params,
+}: {
+  category?: string;
+  sort?: string;
+  search?: string;
+  params: "homepage" | "products";
+}) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/product?${category ? `category=${category}` : ""}${search ? `&search=${search}` : ""}&sort=${sort || "newest"}${params === "homepage" ? "&limit=8" : ""}`,
+  );
+
+  const data: Product[] = await res.json();
+  console.log(data);
+  return data;
+};
+
+const ProductList = async ({
   category,
   params,
+  sort,
+  search,
 }: {
   category: string;
   params: "homepage" | "products";
+  sort?: string;
+  search?: string;
 }) => {
+  const products = await fetchData({ category, sort, search, params });
+
   return (
     <div className="w-full">
       <Categories />

@@ -1,11 +1,8 @@
-import {
-  CartStoreActionsType,
-  CartStoreStateType,
-} from "@/shared/types/cart.type";
+import { CartStoreActionsType, CartStoreStateType } from "@repo/types";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-export const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
+const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
   persist(
     (set) => ({
       cart: [],
@@ -48,11 +45,7 @@ export const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
               ),
           ),
         })),
-      clearCart: () => {
-        set(() => ({
-          cart: [],
-        }));
-      },
+      clearCart: () => set({ cart: [] }),
     }),
     {
       name: "cart",
@@ -65,3 +58,5 @@ export const useCartStore = create<CartStoreStateType & CartStoreActionsType>()(
     },
   ),
 );
+
+export { useCartStore };
