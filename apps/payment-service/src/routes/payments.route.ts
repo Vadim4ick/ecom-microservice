@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import { Hono } from "hono";
+import { publishPaymentSuccess } from "../kafka";
 
 const app = new Hono();
 
@@ -12,7 +13,7 @@ export function authHeader() {
 }
 
 app.post("/create", async (c) => {
-  const { shippingForm, method, total } = await c.req.json();
+  const { shippingForm, method, total, cart } = await c.req.json();
 
   let paymentMethodType: string;
   switch (method) {
@@ -58,6 +59,14 @@ app.post("/create", async (c) => {
     }
 
     const data = await paymentResponse.json();
+
+    await publishPaymentSuccess({
+      userId: shippingForm.email,
+      email: shippingForm.email,
+      amount: total,
+      products: cart,
+      paymentId: data.id,
+    });
 
     return c.json({ paymentUrl: data.confirmation?.confirmation_url });
   } catch (error) {

@@ -1,16 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { ShippingFormInputs } from "@repo/types";
+import { CartItemsType, ShippingFormInputs } from "@repo/types";
 
 type PaymentMethod = "card" | "sbol" | "applepay";
 
 const YoukassaPaymentForm = ({
   shippingForm,
   total,
+  cart,
 }: {
   shippingForm: ShippingFormInputs;
   total: number;
+  cart: CartItemsType;
 }) => {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(
     null,
@@ -31,6 +33,7 @@ const YoukassaPaymentForm = ({
           shippingForm,
           method: selectedMethod,
           total,
+          cart,
         }),
       });
 

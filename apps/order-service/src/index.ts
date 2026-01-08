@@ -4,6 +4,7 @@ import { clerkPlugin } from "@clerk/fastify";
 import { shouldByUser } from "./middleware/authMiddleware";
 import { connectOrderDb } from "@repo/order-db";
 import { orderRoute } from "./routes/order";
+import { startKafkaConsumer } from "./kafka";
 
 const fastify = Fastify({
   logger: true,
@@ -40,5 +41,7 @@ const start = async () => {
     process.exit(1);
   }
 };
+
+startKafkaConsumer().catch(console.error);
 
 start();

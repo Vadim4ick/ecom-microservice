@@ -130,6 +130,7 @@ const CartPage = () => {
             <YoukassaPaymentForm
               shippingForm={shippingForm}
               total={totalPrice(cart)}
+              cart={cart}
             />
           ) : (
             <p className="text-sm text-gray-500">
