@@ -1,3 +1,4 @@
+import { OrderSchemaType } from "@repo/order-db";
 import { Kafka } from "kafkajs";
 
 const kafka = new Kafka({
@@ -17,23 +18,42 @@ async function ensureConnected() {
   }
 }
 
-export async function publishPaymentSuccess(paymentData: any) {
+type PaymentCreatedEvent = {
+  event: "payment.created";
+} & Omit<OrderSchemaType, "createdAt" | "updatedAt">;
+
+type PaymentSucceededEvent = {
+  event: "payment.succeeded";
+  orderId: string;
+};
+
+type PaymentFailedEvent = {
+  event: "payment.failed";
+  orderId: string;
+};
+
+type PaymentEvent =
+  | PaymentCreatedEvent
+  | PaymentSucceededEvent
+  | PaymentFailedEvent;
+
+export async function publishPaymentEvent(event: PaymentEvent) {
   try {
     await ensureConnected();
 
     await producer.send({
-      topic: "payment-success",
+      topic: "payment-events",
       messages: [
         {
-          key: paymentData.email,
-          value: JSON.stringify(paymentData),
+          key: event.orderId, // 🔑 ВСЕГДА orderId
+          value: JSON.stringify(event),
         },
       ],
     });
 
-    console.log("Payment event published:", paymentData.paymentId);
+    console.log(`[Kafka] ${event.event} published for order ${event.orderId}`);
   } catch (error) {
-    console.error("Error publishing to Kafka:", error);
+    console.error("[Kafka] publish error:", error);
     throw error;
   }
 }

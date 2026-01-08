@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
 import { Hono } from "hono";
-import { publishPaymentSuccess } from "../kafka";
+import { publishPaymentEvent } from "../kafka";
 
 const app = new Hono();
 
@@ -30,7 +30,18 @@ app.post("/create", async (c) => {
       return c.json({ message: "Неподдерживаемый способ оплаты" }, 400);
   }
 
+  const orderId = randomUUID();
+
   try {
+    await publishPaymentEvent({
+      event: "payment.created",
+      status: "draft",
+      orderId: orderId,
+      amount: total,
+      email: shippingForm.email,
+      products: cart,
+    });
+
     const paymentResponse = await fetch("https://api.yookassa.ru/v3/payments", {
       method: "POST",
       headers: {
@@ -47,7 +58,7 @@ app.post("/create", async (c) => {
           return_url: "http://localhost:3000/return",
         },
         description: `Оплата заказа для ${shippingForm.name}`,
-        metadata: { order_id: randomUUID() },
+        metadata: { order_id: orderId },
       }),
     });
 
@@ -60,19 +71,42 @@ app.post("/create", async (c) => {
 
     const data = await paymentResponse.json();
 
-    await publishPaymentSuccess({
-      userId: shippingForm.email,
-      email: shippingForm.email,
-      amount: total,
-      products: cart,
-      paymentId: data.id,
-    });
-
     return c.json({ paymentUrl: data.confirmation?.confirmation_url });
   } catch (error) {
-    console.error(error);
-    return c.json({ message: "Ошибка при создании платежа" });
+    console.error("Payment create error:", error);
+    return c.json({ message: "Ошибка при создании платежа" }, 500);
   }
+});
+
+app.post("/webhook", async (c) => {
+  const payload = await c.req.json();
+
+  const payment = payload.object;
+  const paymentId = payment.id;
+  const status = payment.status;
+  const orderId = payment.metadata?.order_id;
+
+  // console.log("Webhook received:", { paymentId, status, orderId });
+
+  if (!orderId) {
+    return c.json({ error: "orderId missing" }, 400);
+  }
+
+  if (status === "succeeded") {
+    await publishPaymentEvent({
+      event: "payment.succeeded",
+      orderId,
+    });
+  }
+
+  if (status === "canceled") {
+    await publishPaymentEvent({
+      event: "payment.failed",
+      orderId,
+    });
+  }
+
+  return c.json({ ok: true });
 });
 
 export default app;

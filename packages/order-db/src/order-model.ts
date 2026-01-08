@@ -1,24 +1,30 @@
 import mongoose, { InferSchemaType, model } from "mongoose";
 const { Schema } = mongoose;
 
-export const OrderStatus = ["success", "failed"] as const;
+// Должно быть:
+export const OrderStatus = ["draft", "pending", "paid", "failed"];
 
 const OrderSchema = new Schema(
   {
-    userId: { type: String, required: true },
+    orderId: { type: String, required: true, unique: true }, // ✅ Добавляем UUID
     email: { type: String, required: true },
+
     amount: { type: Number, required: true },
-    status: { type: String, required: true, enum: OrderStatus },
-    products: {
-      type: [
-        {
-          name: { type: String, required: true },
-          quantity: { type: Number, required: true },
-          price: { type: Number, required: true },
-        },
-      ],
+
+    status: {
+      type: String,
+      enum: OrderStatus,
+      default: "draft",
       required: true,
     },
+
+    products: [
+      {
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+      },
+    ],
   },
   { timestamps: true },
 );

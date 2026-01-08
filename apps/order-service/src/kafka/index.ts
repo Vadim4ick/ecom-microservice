@@ -1,49 +1,75 @@
-import { Order } from "@repo/order-db";
-import { Kafka } from "kafkajs";
+import { Kafka, Partitioners } from "kafkajs";
 
 const kafka = new Kafka({
-  clientId: "order-service",
-  brokers: ["localhost:29092", "localhost:39092", "localhost:49092"],
+  clientId: "payment-service",
+  brokers: [
+    "localhost:29092", // broker-1
+    "localhost:39092", // broker-2
+    "localhost:49092", // broker-3 (leader для payment-events)
+  ],
+  retry: {
+    retries: 8,
+    initialRetryTime: 300,
+  },
 });
 
-const consumer = kafka.consumer({ groupId: "order-service-group" });
+const producer = kafka.producer({
+  createPartitioner: Partitioners.DefaultPartitioner,
+  allowAutoTopicCreation: false, // ✅ Не создавать топики автоматически
+  retry: {
+    retries: 5,
+  },
+});
 
-export async function startKafkaConsumer() {
+let isConnected = false;
+
+async function ensureConnected() {
+  if (!isConnected) {
+    await producer.connect();
+    isConnected = true;
+    console.log("Kafka producer connected");
+  }
+}
+
+type PaymentEvent = {
+  event: "payment.created" | "payment.succeeded" | "payment.failed";
+  paymentId: string;
+  orderId: string;
+  amount?: number;
+  userId?: string;
+  email?: string;
+  products?: {
+    name: string;
+    quantity: number;
+    price: number;
+  }[];
+  createdAt?: string;
+};
+
+export async function publishPaymentEvent(event: PaymentEvent) {
   try {
-    await consumer.connect();
-    console.log("Kafka consumer connected");
+    await ensureConnected();
 
-    await consumer.subscribe({
-      topic: "payment-success",
-      fromBeginning: false,
+    await producer.send({
+      topic: "payment-events",
+      messages: [
+        {
+          key: event.orderId,
+          value: JSON.stringify(event),
+          // Не указываем partition - Kafka сам направит на broker-3
+        },
+      ],
     });
 
-    await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        try {
-          const event = JSON.parse(message.value!.toString());
-          console.log("Payment event received:", event);
-
-          await Order.create({
-            userId: event.userId,
-            email: event.email,
-            amount: event.amount,
-            status: "success",
-            products: event.products,
-          });
-
-          console.log("Order created successfully for:", event.email);
-        } catch (error) {
-          console.error("Error creating order:", error);
-        }
-      },
-    });
+    console.log(`[Kafka] ${event.event} published for order ${event.orderId}`);
   } catch (error) {
-    console.error("Error starting Kafka consumer:", error);
-    throw error;
+    console.error("[Kafka] publish error:", error);
+    // Не бросаем ошибку, чтобы не сломать payment flow
   }
 }
 
 process.on("SIGTERM", async () => {
-  await consumer.disconnect();
+  if (isConnected) {
+    await producer.disconnect();
+  }
 });

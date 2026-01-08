@@ -4,7 +4,7 @@ import { clerkPlugin } from "@clerk/fastify";
 import { shouldByUser } from "./middleware/authMiddleware";
 import { connectOrderDb } from "@repo/order-db";
 import { orderRoute } from "./routes/order";
-import { startKafkaConsumer } from "./kafka";
+import { startConsumer } from "./kafka/kafkaConsumer";
 
 const fastify = Fastify({
   logger: true,
@@ -31,17 +31,16 @@ fastify.register(orderRoute);
 const start = async () => {
   try {
     await connectOrderDb();
-    await fastify.listen({
-      port: 8001,
-    });
 
+    // запускаем consumer параллельно, не блокируя сервер
+    await startConsumer();
+
+    await fastify.listen({ port: 8001 });
     fastify.log.info(`server listening on 8001`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
   }
 };
-
-startKafkaConsumer().catch(console.error);
 
 start();
