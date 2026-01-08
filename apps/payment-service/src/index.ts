@@ -1,7 +1,7 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { clerkMiddleware } from "@hono/clerk-auth";
-import sessionRoute from "./routes/session.route";
+import paymentRoute from "./routes/payments.route";
 import { cors } from "hono/cors";
 
 const app = new Hono();
@@ -23,28 +23,7 @@ app.get("/health", (c) => {
   });
 });
 
-// app.post("/create-stripe-product", async (c) => {
-//   const res = await stripe.products.create({
-//     id: "123",
-//     name: "Test Product",
-//     default_price_data: {
-//       currency: "usd",
-//       unit_amount: 10 * 100,
-//     },
-//   });
-
-//   return c.json(res);
-// });
-
-// app.get("/stripe-product-price", async (c) => {
-//   const res = await stripe.prices.list({
-//     product: "123",
-//   });
-
-//   return c.json(res);
-// });
-
-app.route("/sessions", sessionRoute);
+app.route("/payments", paymentRoute);
 
 const start = async () => {
   try {

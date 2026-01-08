@@ -6,8 +6,8 @@ import { ArrowRight, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { ShippingFormInputs } from "@repo/types";
-import { StripePaymentForm } from "@/components/StripePaymentForm";
+import { CartItemsType, ShippingFormInputs } from "@repo/types";
+import { YoukassaPaymentForm } from "@/components/YoukassaPaymentForm";
 
 const steps = [
   {
@@ -23,6 +23,10 @@ const steps = [
     title: "Payment Method",
   },
 ];
+
+export const totalPrice = (cart: CartItemsType) => {
+  return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+};
 
 const CartPage = () => {
   const searchParams = useSearchParams();
@@ -123,7 +127,10 @@ const CartPage = () => {
             <ShippingForm setShippingForm={setShippingForm} />
           ) : //
           activeStep === 3 && shippingForm ? (
-            <StripePaymentForm shippingForm={shippingForm} />
+            <YoukassaPaymentForm
+              shippingForm={shippingForm}
+              total={totalPrice(cart)}
+            />
           ) : (
             <p className="text-sm text-gray-500">
               Please fill in the shipping form to continue.
@@ -155,12 +162,7 @@ const CartPage = () => {
             <hr className="border-gray-200" />
             <div className="flex justify-between">
               <p className="font-semibold text-gray-800">Total</p>
-              <p className="font-medium">
-                $
-                {cart
-                  .reduce((acc, item) => acc + item.price * item.quantity, 0)
-                  .toFixed(2)}
-              </p>
+              <p className="font-medium">${totalPrice(cart)}</p>
             </div>
           </div>
           {activeStep === 1 && (
