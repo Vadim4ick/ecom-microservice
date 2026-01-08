@@ -42,7 +42,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   return (
     <div className="overflow-hidden rounded-lg shadow-lg">
       <Link href={`/products/${product.id}`}>
-        <div className="relative aspect-[2/3]">
+        <div className="relative aspect-2/3">
           <Image
             src={
               (product.images as Record<string, string>)?.[

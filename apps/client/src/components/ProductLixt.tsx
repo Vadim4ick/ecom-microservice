@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ProductCard } from "./ProductCard";
-import { Categories } from "./Categories";
 import Filter from "./Filter";
 import { Product } from "@repo/db";
+import { CategoriesList } from "./Categories/CategoriesList";
 
 const fetchData = async ({
   category,
@@ -20,7 +20,7 @@ const fetchData = async ({
   );
 
   const data: Product[] = await res.json();
-  console.log(data);
+
   return data;
 };
 
@@ -39,7 +39,7 @@ const ProductList = async ({
 
   return (
     <div className="w-full">
-      <Categories />
+      <CategoriesList category={category} />
 
       {params === "products" && <Filter />}
 

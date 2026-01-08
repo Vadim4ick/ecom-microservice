@@ -10,7 +10,7 @@ import { shouldBeAdmin } from "../middleware/authMiddleware";
 const router = Router();
 
 router.post("/", shouldBeAdmin, createCategory);
-router.get("/", shouldBeAdmin, getCategories);
+router.get("/", getCategories);
 router.put("/:id", shouldBeAdmin, updateCategory);
 router.delete("/:id", deleteCategory);
 
